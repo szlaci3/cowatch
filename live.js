@@ -48,7 +48,7 @@ export async function connectVoice({
       apiKey: data.token,
       httpOptions: {
         apiVersion: "v1alpha",
-        baseUrl: location.origin + "/api/live-relay",
+        ...(data.relay ? { baseUrl: location.origin + "/api/live-relay" } : {}),
       },
     });
     const tool = (name, description, key) => ({

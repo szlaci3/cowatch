@@ -30,3 +30,13 @@ This prototype is intended for a personal development environment. Access to its
 ## Artwork
 
 The curated shelf uses editorial cover art. The bundled images are from [Wallpaper Bank](https://github.com/JaKooLit/Wallpaper-Bank/tree/c5e1780c29adca428dc4ca2d970bd1a6a09f18f3/wallpapers): Mountain, Fantasy - Mountain Lake, Space-Nebula and Fantasy-Japanese-Street. Search results use thumbnails supplied by YouTube.
+
+## Deploy on Netlify
+
+Import this GitHub repository into Netlify and select the `main` branch. Use the repository root as the base directory. The checked-in `netlify.toml` selects Node 24 for the build, runs `npm run build`, publishes `dist`, and bundles the API function.
+
+In the Netlify project settings, add `GEMINI_API_KEY` and `YOUTUBE_API_KEY` with **Functions** scope for the desired deploy context. The former enables voice and the latter enables full YouTube search. Optionally set `GEMINI_LIVE_MODEL` in the same scope. Use the keys from their issuing services and keep these names server-side. The Codex cloud bindings are specific to that environment. Trigger a new deploy after changing variables.
+
+On the deployed HTTPS site, search for a topic outside the starter shelf and check for YouTube results. Select **Start talking**, grant microphone access, choose a recommended video, and let it end to check the return to conversation. Netlify serves the short-lived token and search responses at the existing API paths. The browser streams audio directly to Gemini with the token. The local Node server still supports the proxy-backed WebSocket relay.
+
+For a personal deployment, enable Netlify visitor access protection before sharing the site so visitors with access to the API routes are the people you intend to fund.
