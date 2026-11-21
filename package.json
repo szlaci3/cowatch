@@ -1,0 +1,35 @@
+{
+  "name": "cowatch",
+  "version": "1.0.0",
+  "description": "A voice-first YouTube discovery studio powered by Gemini Live.",
+  "scripts": {
+    "dev": "node --use-env-proxy --env-file-if-exists=.env server.mjs",
+    "build": "vite build",
+    "start": "node --use-env-proxy --env-file-if-exists=.env server.mjs --production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/szlaci3/cowatch.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/szlaci3/cowatch/issues"
+  },
+  "homepage": "https://github.com/szlaci3/cowatch#readme",
+  "dependencies": {
+    "@google/genai": "^3.6.1",
+    "express": "^5.3.0",
+    "https-proxy-agent": "^9.1.0",
+    "lucide-react": "^1.77.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "vite": "^8.3.8",
+    "ws": "^8.23.0"
+  },
+  "engines": {
+    "node": ">=24.5.0"
+  }
+}
