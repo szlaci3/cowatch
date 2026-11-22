@@ -82,11 +82,18 @@ async function search(query) {
     );
     if (!response.ok) throw Error();
     const data = await response.json();
+    const details = await videoDetails(data.items.map(({ id }) => id.videoId));
     return json({
       source: "YouTube",
       videos: data.items.map(({ id, snippet: s }) => ({
         id: id.videoId,
-        title: s.title,
+        title: details.get(id.videoId)?.snippet?.title || s.title,
+        description: (
+          details.get(id.videoId)?.snippet?.description ||
+          s.description ||
+          ""
+        ).slice(0, 1600),
+        duration: details.get(id.videoId)?.contentDetails?.duration || null,
         channel: s.channelTitle,
         image: s.thumbnails.high.url,
         topic: "YouTube",
@@ -101,4 +108,29 @@ async function search(query) {
       502,
     );
   }
+}
+
+async function videoDetails(ids) {
+  if (!ids.length) return new Map();
+  const params = new URLSearchParams({
+    id: ids.join(","),
+    part: "snippet,contentDetails",
+    fields: "items(id,snippet(title,description),contentDetails(duration))",
+  });
+  try {
+    const response = await fetch(
+      "https://www.googleapis.com/youtube/v3/videos?" + params,
+      {
+        headers: { "X-Goog-Api-Key": process.env.YOUTUBE_API_KEY },
+        signal: AbortSignal.timeout(5000),
+      },
+    );
+    if (response.ok) {
+      const { items } = await response.json();
+      return new Map(items.map((video) => [video.id, video]));
+    }
+  } catch {
+    // Search snippets still provide useful context if enrichment times out.
+  }
+  return new Map();
 }

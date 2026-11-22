@@ -15,7 +15,7 @@ import {
   ChevronRight,
   MessageCircle,
 } from "lucide-react";
-import { shelf } from "./shelf";
+import { shelf, recommendationContext } from "./shelf";
 
 import { Player } from "./player";
 import "./style.css";
@@ -123,11 +123,7 @@ function App() {
         );
       }
       return {
-        videos: d.videos.map(({ id, title, channel }) => ({
-          id,
-          title,
-          channel,
-        })),
+        videos: d.videos.map(recommendationContext),
         source: d.source,
       };
     } catch (e) {
@@ -165,7 +161,7 @@ function App() {
       const connection = await connectVoice({
         context: JSON.stringify({
           conversation: log.current,
-          picks: picks.current,
+          picks: picks.current.map(recommendationContext),
         }).slice(-12000),
         onText: (r, t) => add(r, t, true),
         onSearch: search,
